@@ -31,9 +31,9 @@
 #if defined (__APPLE__)
 #include <cv.h>
 #else
-#include <opencv/cv.h>
+#include <opencv2/core/core.hpp>
 #endif
-
+#include "Face.h"
 namespace libface
 {
 

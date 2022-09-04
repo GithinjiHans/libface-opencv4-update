@@ -26,6 +26,8 @@
  * ============================================================ */
 
 #include "FisherCore.h"
+#include <opencv2/core/core_c.h>
+#include <opencv2/imgcodecs.hpp>
 
 namespace libface
 {
@@ -114,21 +116,21 @@ void FisherCore::calulateFisherStats()
     int i,j;
 
     //images need to be scaled to the same size.
-    IplImage* img = cvLoadImage("src/TrainDatabase/2.jpg",0); //0 - grayscale
+    IplImage* img = cv::imread("src/TrainDatabase/2.jpg",0); //0 - grayscale
     CvMat* img2   = cvCreateMat(img->height, img->width, CV_32FC1);
     cvConvert(img, img2);
     CvMat* row    = transpose(reshape(img2));
 
     //CvMat* img3 = cvCreateMat(200, 180, CV_32FC1);
 
-    IplImage* img_training = cvLoadImage("src/TrainDatabase/3.jpg",0);
+    IplImage* img_training = cv::imread("src/TrainDatabase/3.jpg",0);
     CvMat* img2_training   = cvCreateMat(img_training->height, img_training->width, CV_32FC1);
     cvConvert(img_training, img2_training);
     CvMat* row2            = transpose(reshape(img2_training));
 
     CvMat* T = combine(row, row2);
 
-    img  = cvLoadImage("src/TrainDatabase/5.jpg",0); //0 - grayscale
+    img  = cv::imread("src/TrainDatabase/5.jpg",0); //0 - grayscale
     img2 = cvCreateMat(img->height, img->width, CV_32FC1);
     cvConvert(img, img2);
     row  = transpose(reshape(img2));
