@@ -21,4 +21,4 @@ Compile programs that use libface with the linking option -lface
 
 NOTE: As of June 2010, Mandriva ships opencv split into multiple packages. You MUST install the opencv-samples package.
 And now I'll rewrite it from scratch
-And and make it public for use
+And and make it public for us
