@@ -32,6 +32,7 @@
 
 #include <iostream>
 #include <cmath>
+#include <opencv2/core/core_c.h>
 #include <opencv2/core/types.hpp>
 #include <opencv2/imgproc.hpp>
 #include <opencv2/opencv.hpp>
@@ -73,7 +74,7 @@ IplImage* LibFaceUtils::resizeToArea(const IplImage* img, int area, double& rati
     ratio         = z;
     IplImage* out = cvCreateImage(s, img->depth, img->nChannels);
     // cvResize is equivalent to
-    cv::resize(img, out, s, 0, 0, cv::INTER_LINEAR);
+    cv::resize(cv::cvarrToMat(img), cv::cvarrToMat(out), s, 0, 0, cv::INTER_LINEAR);
 
     return out;
 }
