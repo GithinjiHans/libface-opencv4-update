@@ -33,6 +33,8 @@
 #include <iostream>
 #include <cmath>
 #include <opencv2/core/types.hpp>
+#include <opencv2/imgproc.hpp>
+#include <opencv2/opencv.hpp>
 #include <opencv2/highgui.hpp>
 
 #include "LibFaceUtils.h"
@@ -70,7 +72,8 @@ IplImage* LibFaceUtils::resizeToArea(const IplImage* img, int area, double& rati
     s.height      = (int)(H/z);
     ratio         = z;
     IplImage* out = cvCreateImage(s, img->depth, img->nChannels);
-    cv::Resize(img, out);
+    // cvResize is equivalent to
+    cv::resize(img, out, s, 0, 0, cv::INTER_LINEAR);
 
     return out;
 }
@@ -471,7 +474,8 @@ CvMat* LibFaceUtils::stringToMatrix(const string & data, int type)
 void LibFaceUtils::showImage(CvArr* src, const string& title)
 {
     cv::namedWindow(title.data(),cv::WINDOW_AUTOSIZE);
-    cv::imshow(title.data(), src);
+    // toString in c++ is written as to_string in c++11
+    cv::imshow(title.data(), cv::cvarrToMat(src));
     cv::waitKey(0);
     cv::destroyWindow(title.data());
 }
@@ -489,7 +493,8 @@ void LibFaceUtils::showImage(const IplImage* img, const vector<Face>& faces, dou
     for (unsigned int i = 0; i < faces.size(); ++i)    // Draw squares over detected faces
     {
         //cvRectangle is equivalent to cv::rectangle
-        CvRect( copy,
+        // to create a rectangle object we use cvRect 
+        cv::rectangle(cv::cvarrToMat( copy),
                      cvPoint((int)(faces[i].getX1()/scale),
                              (int)(faces[i].getY1()/scale)),
                      cvPoint((int)(faces[i].getX2()/scale),
@@ -499,7 +504,7 @@ void LibFaceUtils::showImage(const IplImage* img, const vector<Face>& faces, dou
     }
 
     cv::namedWindow(title.data(), cv::WINDOW_AUTOSIZE);
-    cv::imshow(title.data(), copy);
+    cv::imshow(title.data(), cv::cvarrToMat(copy));
     cv::waitKey(0);
     cv::destroyWindow(title.data());
 }
@@ -685,7 +690,8 @@ IplImage* LibFaceUtils::scaledSection(const IplImage* src, const CvRect& sourceR
 
     IplImage* result = cvCreateImage(cvSize(destSize.width, destSize.height), src->depth, src->nChannels);
 //    cvResize is equivalent to cv::resize in OpenCV 2.0
-    cv::resize(srcHeader, result);
+// to convert to IplImage to Mat use cv::cvarrToMat
+    cv::resize(cv::cvarrToMat(srcHeader), cv::cvarrToMat(result), cv::Size(destSize.width, destSize.height));
 
     cvReleaseImageHeader(&srcHeader);
     return result;
