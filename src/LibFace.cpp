@@ -46,6 +46,8 @@
 #include <iterator>
 
 //TODO: Scale images here.
+#include <opencv2/opencv.hpp>
+#include <opencv2/core/types_c.h>
 #include "LibFace.h"
 #include "LibFaceUtils.h"
 #include "FaceDetect.h"

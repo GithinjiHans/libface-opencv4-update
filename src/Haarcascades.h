@@ -46,7 +46,8 @@ namespace libface
 typedef struct CascadeStruct
 {
     std::string              name;
-    CvHaarClassifierCascade* haarcasc;
+    // CvHaarClassifierCascade* haarcasc;
+    int * haarcasc;
 } Cascade;
 
 class FACEAPI Haarcascades

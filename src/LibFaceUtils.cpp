@@ -32,6 +32,8 @@
 
 #include <iostream>
 #include <cmath>
+#include <opencv2/core/types.hpp>
+#include <opencv2/highgui.hpp>
 
 #include "LibFaceUtils.h"
 
@@ -68,7 +70,7 @@ IplImage* LibFaceUtils::resizeToArea(const IplImage* img, int area, double& rati
     s.height      = (int)(H/z);
     ratio         = z;
     IplImage* out = cvCreateImage(s, img->depth, img->nChannels);
-    cvResize(img, out);
+    cv::Resize(img, out);
 
     return out;
 }
@@ -394,7 +396,8 @@ IplImage* LibFaceUtils::stringToImage(const string& data, int depth, int channel
     {
         for(j=0;j<cols;j++)
         {
-            cvSetAt(img,cvScalarAll(values.at(cols*i+j)),i,j);
+            cvSet2D(img, i, j, cvScalarAll(values.at(i*cols+j)));
+            // cvSet2D(img,cvScalarAll(values.at(cols*i+j)),i,j);
         }
     }
 
@@ -452,7 +455,8 @@ CvMat* LibFaceUtils::stringToMatrix(const string & data, int type)
     {
         for(j=0 ; j<cols ; j++)
         {
-            cvSetAt(matrix, cvScalarAll(values.at(cols*i+j)), i, j);
+            cvSet2D(matrix, i, j, cvScalarAll(values.at(i*cols+j)));
+            // cvSetAt(matrix, cvScalarAll(values.at(cols*i+j)), i, j);
         }
     }
 
@@ -466,10 +470,10 @@ CvMat* LibFaceUtils::stringToMatrix(const string & data, int type)
  */
 void LibFaceUtils::showImage(CvArr* src, const string& title)
 {
-    cvNamedWindow(title.data(),CV_WINDOW_AUTOSIZE);
-    cvShowImage(title.data(), src);
-    cvWaitKey(0);
-    cvDestroyWindow(title.data());
+    cv::namedWindow(title.data(),cv::WINDOW_AUTOSIZE);
+    cv::imshow(title.data(), src);
+    cv::waitKey(0);
+    cv::destroyWindow(title.data());
 }
 
 /**
@@ -484,18 +488,20 @@ void LibFaceUtils::showImage(const IplImage* img, const vector<Face>& faces, dou
 
     for (unsigned int i = 0; i < faces.size(); ++i)    // Draw squares over detected faces
     {
-        cvRectangle( copy,
+        //cvRectangle is equivalent to cv::rectangle
+        CvRect( copy,
                      cvPoint((int)(faces[i].getX1()/scale),
                              (int)(faces[i].getY1()/scale)),
                      cvPoint((int)(faces[i].getX2()/scale),
                              (int)(faces[i].getY2()/scale)),
-                     CV_RGB(255, 0, 0), 3, 1, 0);
+                            //  CV_RGB is equivalent to cvScalar
+                     cv::Scalar(255, 0, 0), 3, 1, 0);
     }
 
-    cvNamedWindow(title.data(), CV_WINDOW_AUTOSIZE);
-    cvShowImage(title.data(), copy);
-    cvWaitKey(0);
-    cvDestroyWindow(title.data());
+    cv::namedWindow(title.data(), cv::WINDOW_AUTOSIZE);
+    cv::imshow(title.data(), copy);
+    cv::waitKey(0);
+    cv::destroyWindow(title.data());
 }
 
 /**
@@ -678,7 +684,8 @@ IplImage* LibFaceUtils::scaledSection(const IplImage* src, const CvRect& sourceR
     cvSetImageROI(srcHeader, sourceRect);
 
     IplImage* result = cvCreateImage(cvSize(destSize.width, destSize.height), src->depth, src->nChannels);
-    cvResize(srcHeader, result);
+//    cvResize is equivalent to cv::resize in OpenCV 2.0
+    cv::resize(srcHeader, result);
 
     cvReleaseImageHeader(&srcHeader);
     return result;

@@ -107,7 +107,8 @@ private:
      *  @param params The parameters to be used for detection
      *  @return Returns a vector of Face objects. Each object hold information about 1 face.
      */
-    std::vector<Face> cascadeResult(const IplImage* inputImage, CvHaarClassifierCascade* casc, const DetectObjectParameters& params);
+    // std::vector<Face> cascadeResult(const IplImage* inputImage, CvHaarClassifierCascade* casc, const DetectObjectParameters& params);
+    std::vector<Face> cascadeResult(const IplImage* inputImage, int* casc, const DetectObjectParameters& params);
 
     bool verifyFace(const IplImage* inputImage, const Face &face);
 

@@ -38,6 +38,7 @@
 #include "Eigenfaces.h"
 #include "LibFaceConfig.h"
 #include "LibFaceCore.h"
+#include <opencv2/core/types_c.h>
 
 namespace libface
 {
@@ -262,7 +263,7 @@ public:
      * If the image is larger, it will be rescaled automatically.
      */
     CvSize getRecommendedImageSizeForRecognition(const CvSize& size = cvSize(0,0)) const;
-
+// CvRect is used to represent a rectangle
 private:
 
     class LibFacePriv;
